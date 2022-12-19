@@ -37,13 +37,13 @@ func (l *LogEntry) Insert(entry LogEntry) error {
 	collection := client.Database("logs").Collection("logs")
 
 	_, err := collection.InsertOne(context.TODO(), LogEntry{
-		Name:      entry.Name,
-		Data:      entry.Data,
+		Name: entry.Name,
+		Data: entry.Data,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	})
 	if err != nil {
-		log.Println("Error inserting into logs", err)
+		log.Println("Error inserting into logs:", err)
 		return err
 	}
 
@@ -57,16 +57,13 @@ func (l *LogEntry) All() ([]*LogEntry, error) {
 	collection := client.Database("logs").Collection("logs")
 
 	opts := options.Find()
-
-	opts.SetSort(bson.D{{Key: "created_at", Value: -1}})
+	opts.SetSort(bson.D{{"created_at", -1}})
 
 	cursor, err := collection.Find(context.TODO(), bson.D{}, opts)
-
 	if err != nil {
 		log.Println("Finding all docs error:", err)
 		return nil, err
 	}
-
 	defer cursor.Close(ctx)
 
 	var logs []*LogEntry
@@ -75,9 +72,8 @@ func (l *LogEntry) All() ([]*LogEntry, error) {
 		var item LogEntry
 
 		err := cursor.Decode(&item)
-
 		if err != nil {
-			log.Println("Error decoding log into slice:", err)
+			log.Print("Error decoding log into slice:", err)
 			return nil, err
 		} else {
 			logs = append(logs, &item)
