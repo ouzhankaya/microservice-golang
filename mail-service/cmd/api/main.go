@@ -19,7 +19,7 @@ func main() {
 		Mailer: createMail(),
 	}
 
-	log.Println("Starting mail service on port:", webPort)
+	log.Println("Starting mail service on port", webPort)
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
@@ -27,7 +27,6 @@ func main() {
 	}
 
 	err := srv.ListenAndServe()
-
 	if err != nil {
 		log.Panic(err)
 	}
@@ -42,7 +41,7 @@ func createMail() Mail {
 		Username:    os.Getenv("MAIL_USERNAME"),
 		Password:    os.Getenv("MAIL_PASSWORD"),
 		Encryption:  os.Getenv("MAIL_ENCRYPTION"),
-		FromName:    os.Getenv("MAIL_FROMNAME"),
+		FromName:    os.Getenv("FROM_NAME"),
 		FromAddress: os.Getenv("FROM_ADDRESS"),
 	}
 
