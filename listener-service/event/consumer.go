@@ -11,7 +11,7 @@ import (
 )
 
 type Consumer struct {
-	conn      *amqp.Connection
+	conn *amqp.Connection
 	queueName string
 }
 
@@ -47,7 +47,6 @@ func (consumer *Consumer) Listen(topics []string) error {
 	if err != nil {
 		return err
 	}
-
 	defer ch.Close()
 
 	q, err := declareRandomQueue(ch)
@@ -84,7 +83,7 @@ func (consumer *Consumer) Listen(topics []string) error {
 		}
 	}()
 
-	fmt.Printf("Waiting for messages on exhange [Exchange, Queue] [logs_topic, %s]\n", q.Name)
+	fmt.Printf("Waiting for message [Exchange, Queue] [logs_topic, %s]\n", q.Name)
 	<-forever
 
 	return nil
@@ -98,10 +97,12 @@ func handlePayload(payload Payload) {
 		if err != nil {
 			log.Println(err)
 		}
+
 	case "auth":
 		// authenticate
 
-		// you can have as many cases as you want, as long as you write the logic
+	// you can have as many cases as you want, as long as you write the logic
+
 	default:
 		err := logEvent(payload)
 		if err != nil {
@@ -133,6 +134,6 @@ func logEvent(entry Payload) error {
 	if response.StatusCode != http.StatusAccepted {
 		return err
 	}
-
+	
 	return nil
 }

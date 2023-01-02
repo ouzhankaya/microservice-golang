@@ -25,7 +25,6 @@ func (e *Emitter) Push(event string, severity string) error {
 	if err != nil {
 		return err
 	}
-
 	defer channel.Close()
 
 	log.Println("Pushing to channel")
@@ -37,7 +36,7 @@ func (e *Emitter) Push(event string, severity string) error {
 		false,
 		amqp.Publishing{
 			ContentType: "text/plain",
-			Body:        []byte(event),
+			Body: []byte(event),
 		},
 	)
 	if err != nil {
@@ -45,7 +44,6 @@ func (e *Emitter) Push(event string, severity string) error {
 	}
 
 	return nil
-
 }
 
 func NewEventEmitter(conn *amqp.Connection) (Emitter, error) {
@@ -57,5 +55,6 @@ func NewEventEmitter(conn *amqp.Connection) (Emitter, error) {
 	if err != nil {
 		return Emitter{}, err
 	}
+
 	return emitter, nil
 }
